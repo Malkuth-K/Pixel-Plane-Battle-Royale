@@ -1,2 +1,2 @@
 # Pixel-Plane-Battle-Royale
-This is an attempt to recreate the open-source H5 project 'Pixel Plane Brawl' from the game 'Honkai: Star Rail', with the copyright licensed under the GNU Affero General Public License v3.0.
+这是一个尝试复刻游戏《崩坏-星穹铁道》中《像素飞机大乱斗》玩法的项目，版权协议使用GNU Affero 通用公共许可证 v3.0
