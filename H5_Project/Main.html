@@ -1,0 +1,663 @@
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!--
+  Pixel-Plane-Battle-Royale - Launch Screen
+  Author: Malkuth-K (Malkuth_K)
+  Copyright (C) 2026 Malkuth-K
+  Licensed under GNU Affero General Public License v3.0 - see LICENSE
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>像素飞机大乱斗</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body data-3d-parallax="on" data-3d-intensity="1.5" data-3d-glow="on">
+    <div class="launch-screen" id="launch-screen">
+        <!-- 3D Content Wrapper -->
+        <div class="content-3d-wrapper">
+            <div class="content">
+                <div class="logo-container">
+                    <div class="game-title" id="game-title">像素飞机大乱斗</div>
+                    <canvas id="game-subtitle-canvas" class="game-subtitle"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right-side Action Panel -->
+        <div class="action-panel">
+            <button class="btn-start" onclick="startGame()"><img src="img/b1.png" alt="前往参与" class="btn-start-img"></button>
+            <button class="btn-exit-program" onclick="closeProgram()">关闭程序</button>
+            <button class="btn-about" onclick="showAbout()">关于</button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            PIXEL-PLANE-BATTLE-ROYALE &copy; 2026 GNU AGPL v3.0
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading">
+        <div class="loading-title">加载中...</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loading-bar"></div>
+        </div>
+        <div class="loading-text" id="loading-text">准备战斗...</div>
+    </div>
+
+    <!-- Mode Selection Screen -->
+    <div class="mode-selection-screen" id="mode-selection">
+        <div class="arcade-bg">
+            <div class="star-tunnel"></div>
+            <div class="grid-floor"></div>
+            <div class="grid-walls">
+                <div class="wall-left"></div>
+                <div class="wall-right"></div>
+            </div>
+            
+            <div class="pixel-trophy">
+                <div class="trophy-base"></div>
+                <div class="trophy-stem"></div>
+                <div class="trophy-cup">
+                    <div class="cup-inner"></div>
+                    <div class="cup-handle-left"></div>
+                    <div class="cup-handle-right"></div>
+                </div>
+                <div class="trophy-top">
+                    <div class="star-1"></div>
+                    <div class="star-2"></div>
+                    <div class="star-3"></div>
+                </div>
+                <div class="trophy-glow"></div>
+            </div>
+            
+            <div class="floating-planes">
+                <div class="pixel-plane plane-1">
+                    <div class="plane-body"></div>
+                    <div class="plane-wing-left"></div>
+                    <div class="plane-wing-right"></div>
+                    <div class="plane-tail"></div>
+                    <div class="plane-engine"></div>
+                    <div class="plane-flame"></div>
+                </div>
+                <div class="pixel-plane plane-2">
+                    <div class="plane-body"></div>
+                    <div class="plane-wing-left"></div>
+                    <div class="plane-wing-right"></div>
+                    <div class="plane-tail"></div>
+                    <div class="plane-engine"></div>
+                    <div class="plane-flame"></div>
+                </div>
+                <div class="pixel-plane plane-3">
+                    <div class="plane-body"></div>
+                    <div class="plane-wing-left"></div>
+                    <div class="plane-wing-right"></div>
+                    <div class="plane-tail"></div>
+                    <div class="plane-engine"></div>
+                    <div class="plane-flame"></div>
+                </div>
+                <div class="pixel-plane plane-4">
+                    <div class="plane-body"></div>
+                    <div class="plane-wing-left"></div>
+                    <div class="plane-wing-right"></div>
+                    <div class="plane-tail"></div>
+                    <div class="plane-engine"></div>
+                    <div class="plane-flame"></div>
+                </div>
+            </div>
+            
+            <div class="floating-pixel-blocks">
+                <div class="pixel-block block-1"></div>
+                <div class="pixel-block block-2"></div>
+                <div class="pixel-block block-3"></div>
+                <div class="pixel-block block-4"></div>
+                <div class="pixel-block block-5"></div>
+                <div class="pixel-block block-6"></div>
+            </div>
+        </div>
+        
+        <div class="arcade-title">
+            <div class="title-text">像素飞机大乱斗</div>
+            <div class="title-glow"></div>
+        </div>
+        
+        <div class="right-ui-panel">
+            <div class="panel-header">
+                <div class="score-section">
+                    <div class="score-label">职业积分</div>
+                    <div class="score-value" id="career-score">102500</div>
+                </div>
+                <div class="plane-illustration">
+                    <div class="mini-plane">
+                        <div class="mini-body"></div>
+                        <div class="mini-wing-left"></div>
+                        <div class="mini-wing-right"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-divider"></div>
+            <div class="mode-label">巅峰对决</div>
+            <div class="panel-divider"></div>
+            <div class="mode-buttons">
+                <button class="mode-btn playoffs-btn" id="playoffs-btn" onclick="showPlayoffsLock()">
+                    <div class="btn-icon-wrapper">🏆</div>
+                    <div class="btn-text">季后赛</div>
+                </button>
+                <button class="mode-btn salary-btn" onclick="selectMode('qualifiers')">
+                    <div class="btn-icon-wrapper">📦</div>
+                    <div class="btn-text">赛事薪金</div>
+                </button>
+            </div>
+        </div>
+        
+        <div class="bottom-left-ui">
+            <button class="reward-btn">
+                <div class="reward-icon">🎁</div>
+                <div class="reward-text">限时奖励</div>
+            </button>
+            <div class="developer-text">Malkuth-K开发</div>
+        </div>
+        
+        <canvas id="mode-particle-canvas"></canvas>
+    </div>
+
+    <!-- Hangar Selection Screen -->
+    <div class="hangar-selection-screen" id="hangar-selection">
+        <div class="hangar-grid-bg"></div>
+        <div class="hangar-selection-content">
+            <div class="hangar-header">
+                <div class="hangar-title">巅峰对决</div>
+                <div class="hangar-subtitle">选择你的战机，开启空战之旅</div>
+            </div>
+            <div class="hangar-main-area">
+                <div class="hangar-3d-stage">
+                    <canvas id="hangar-selection-canvas"></canvas>
+                    <div class="hangar-3d-glow"></div>
+                </div>
+                <div class="hangar-info-panel">
+                    <div class="info-panel-header">核心装备</div>
+                    <div class="info-panel-content">
+                        <div class="info-aircraft-name" id="selection-ac-name">选择一架战机</div>
+                        <div class="info-aircraft-desc" id="selection-ac-desc"></div>
+                        <div class="info-core-equipment" id="selection-ac-core"></div>
+                        <div class="info-core-skill" id="selection-ac-core-skill"></div>
+                        <div class="info-stats" id="selection-ac-stats"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="hangar-cards-area">
+                <div class="hangar-cards-grid" id="hangar-selection-grid"></div>
+            </div>
+            <div class="hangar-footer">
+                <div class="item-bar" id="item-bar"></div>
+                <div class="hangar-footer-buttons">
+                    <button class="btn-back-hangar" onclick="backToModeSelection()">← 返回模式选择</button>
+                    <button class="btn-start-game" onclick="confirmAircraftSelection()" id="btn-confirm-selection" disabled>开始游戏</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rules Modal -->
+    <div class="modal-overlay" id="rules-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">游戏规则</div>
+                <div class="modal-close" onclick="closeModal('rules-modal')">&times;</div>
+            </div>
+            <div class="modal-content">
+                <h3><span class="icon">&#9876;</span> 活动说明</h3>
+                <ul>
+                    <li><strong>击败所有对手</strong>，存活到最后，成为游戏的胜者吧！</li>
+                    <li>在一局游戏内，存在「修整节点」与「突袭节点」。</li>
+                    <li>在「修整节点」中，开拓者可以为像素飞机挑选装备并将其上阵。</li>
+                    <li>在「突袭节点」中，开拓者的像素飞机将会自动使用装备迎击敌方。</li>
+                    <li>活动分为「晋级之路」与「季后赛」两个模式。</li>
+                    <li>「晋级之路」中的关卡包含五个区段，开拓者击败五个区段中的全部敌人后，即可通关关卡。</li>
+                    <li>「晋级之路」共有四个关卡，参加「晋级之路」即可积累积分，当积分达到一定条件后即可解锁下一关卡。</li>
+                    <li>通关「晋级之路」的全部关卡后，将解锁「季后赛」模式。</li>
+                    <li>「季后赛」模式中，关卡将拓展至七个区段。</li>
+                </ul>
+                <p style="margin-top:20px;text-align:center;color:rgba(150,220,255,0.8);">合理运营，打造最强战机！</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">设置</div>
+                <div class="modal-close" onclick="closeModal('settings-modal')">&times;</div>
+            </div>
+            <div class="modal-content">
+
+                <h3><span class="icon">&#127912;</span> 画面设置</h3>
+                <div class="setting-item">
+                    <span class="setting-label">分辨率 <span class="hint">(开发中)</span></span>
+                    <div class="segmented-control">
+                        <span class="seg-option">自动</span>
+                        <span class="seg-option active">高</span>
+                        <span class="seg-option">中</span>
+                        <span class="seg-option">低</span>
+                    </div>
+                </div>
+
+                <h3><span class="icon">&#9733;</span> 3D 效果设置</h3>
+                <div class="setting-item">
+                    <span class="setting-label">3D 视差效果</span>
+                    <div class="toggle-switch active"
+                         data-setting="data-3d-parallax"
+                         data-label="3D 视差效果">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">3D 景深强度</span>
+                    <div class="segmented-control" data-setting="data-3d-intensity">
+                        <span class="seg-option" data-value="0.5">柔和</span>
+                        <span class="seg-option active" data-value="1.5">增强</span>
+                        <span class="seg-option" data-value="2.5">最大</span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">动态光晕</span>
+                    <div class="toggle-switch active"
+                         data-setting="data-3d-glow"
+                         data-label="动态光晕">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">粒子效果 <span class="hint">(开发中)</span></span>
+                    <div class="toggle-switch active">
+                        <div class="toggle-thumb"></div>
+                    </div>
+                </div>
+
+                <h3><span class="icon">&#128266;</span> 音效设置 <span class="hint">(开发中)</span></h3>
+                <div class="setting-item">
+                    <span class="setting-label">背景音乐音量</span>
+                    <span style="color:rgba(255,255,255,0.4);font-size:14px;">100%</span>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">音效音量</span>
+                    <span style="color:rgba(255,255,255,0.4);font-size:14px;">100%</span>
+                </div>
+
+                <h3><span class="icon">&#9000;</span> 操作设置 <span class="hint">(开发中)</span></h3>
+                <div class="setting-item" style="border-bottom:none;">
+                    <span class="setting-label">灵敏度</span>
+                    <span style="color:rgba(255,255,255,0.4);font-size:14px;">50%</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Equipment Detail Modal -->
+    <div class="modal-overlay" id="equip-detail-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">装备详情</div>
+                <div class="modal-close" onclick="closeModal('equip-detail-modal')">&times;</div>
+            </div>
+            <div class="modal-content">
+                <div class="equip-detail-container" id="equip-detail-content">
+                    <div class="equip-detail-icon" id="detail-icon">📦</div>
+                    <div class="equip-detail-name" id="detail-name">装备名称</div>
+                    <div class="equip-detail-rarity" id="detail-rarity">普通</div>
+                    <div class="equip-detail-stats" id="detail-stats"></div>
+                    <div class="equip-detail-effect" id="detail-effect"></div>
+                    <div class="equip-detail-desc" id="detail-desc"></div>
+                    <div class="equip-detail-actions">
+                        <button class="btn-equip" id="btn-equip" onclick="equipItemFromDetail()">装备</button>
+                        <button class="btn-unequip" id="btn-unequip" onclick="unequipCurrentItem()">卸下</button>
+                        <button class="btn-sell" id="btn-sell" onclick="sellCurrentItem()">出售</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Modal -->
+    <div class="modal-overlay" id="inventory-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">装备背包</div>
+                <div class="modal-close" onclick="closeModal('inventory-modal')">&times;</div>
+            </div>
+            <div class="modal-content">
+                <div class="inventory-section">
+                    <div class="section-title">已装备</div>
+                    <div class="equipped-slots" id="equipped-slots">
+                        <div class="inventory-slot" id="inv-slot-0" onclick="showEquipDetail(0)">
+                            <div class="inv-slot-icon">📦</div>
+                            <div class="inv-slot-content">空</div>
+                        </div>
+                        <div class="inventory-slot" id="inv-slot-1" onclick="showEquipDetail(1)">
+                            <div class="inv-slot-icon">📦</div>
+                            <div class="inv-slot-content">空</div>
+                        </div>
+                        <div class="inventory-slot" id="inv-slot-2" onclick="showEquipDetail(2)">
+                            <div class="inv-slot-icon">📦</div>
+                            <div class="inv-slot-content">空</div>
+                        </div>
+                        <div class="inventory-slot" id="inv-slot-3" onclick="showEquipDetail(3)">
+                            <div class="inv-slot-icon">📦</div>
+                            <div class="inv-slot-content">空</div>
+                        </div>
+                        <div class="inventory-slot" id="inv-slot-4" onclick="showEquipDetail(4)">
+                            <div class="inv-slot-icon">📦</div>
+                            <div class="inv-slot-content">空</div>
+                        </div>
+                        <div class="inventory-slot" id="inv-slot-5" onclick="showEquipDetail(5)">
+                            <div class="inv-slot-icon">📦</div>
+                            <div class="inv-slot-content">空</div>
+                        </div>
+                        <div class="inventory-slot" id="inv-slot-6" onclick="showEquipDetail(6)">
+                            <div class="inv-slot-icon">📦</div>
+                            <div class="inv-slot-content">空</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="inventory-section">
+                    <div class="section-title">背包库存</div>
+                    <div class="inventory-list" id="inventory-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Main Interface -->
+    <div class="game-interface" id="game-interface">
+        <div class="game-header">
+            <div class="header-left">
+                <div class="mode-badge">晋级之路</div>
+                <div class="stage-info">区段 <span id="stage-num">1</span>/5</div>
+            </div>
+            <div class="header-center">
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <span class="stat-icon">💰</span>
+                        <span class="stat-value" id="gold-display">100</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">❤️</span>
+                        <span class="stat-value" id="hp-display">100/100</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">⚔️</span>
+                        <span class="stat-value" id="attack-display">10</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">🛡️</span>
+                        <span class="stat-value" id="defense-display">5</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn-inventory" onclick="openInventory()">🎒 背包</button>
+                <button class="btn-save" onclick="saveSystem.save()">保存</button>
+                <button class="btn-exit" onclick="exitGame()">退出</button>
+            </div>
+        </div>
+
+        <div class="game-body">
+            <div class="panel-left">
+                <div class="panel-tabs">
+                    <button class="tab-btn active" data-tab="shop">🛒 装备商店</button>
+                    <button class="tab-btn" data-tab="compose">🔧 装备合成</button>
+                    <button class="tab-btn" data-tab="hangar">✈️ 备战机库</button>
+                    <button class="tab-btn" data-tab="achievements">🏆 成就系统</button>
+                </div>
+
+                <div class="panel-content">
+                    <div class="tab-content active" id="tab-shop">
+                        <div class="shop-section">
+                            <h3>伤害类装备</h3>
+                            <div class="equipment-grid" id="weapon-grid"></div>
+                        </div>
+                        <div class="shop-section">
+                            <h3>辅助类装备</h3>
+                            <div class="equipment-grid" id="accessory-grid"></div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-compose">
+                        <div class="compose-area">
+                            <div class="compose-inputs">
+                                <div class="compose-slot" id="compose-slot-1">
+                                    <div class="slot-placeholder">选择装备</div>
+                                </div>
+                                <div class="compose-arrow">→</div>
+                                <div class="compose-slot" id="compose-slot-2">
+                                    <div class="slot-placeholder">选择装备</div>
+                                </div>
+                            </div>
+                            <button class="btn-compose" onclick="composeSystem.tryCompose()">合成</button>
+                            <div class="compose-result" id="compose-result"></div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-hangar">
+                        <div class="hangar-content">
+                            <div class="hangar-header">
+                                <div class="hangar-title">备战机库</div>
+                                <div class="hangar-subtitle">选择你的战机出战</div>
+                            </div>
+                            <div class="hangar-main-area">
+                                <div class="hangar-info-panel">
+                                    <div class="aircraft-name" id="ac-name">选择一架战机</div>
+                                    <div class="aircraft-desc" id="ac-desc"></div>
+                                    <div class="core-equipment" id="ac-core"></div>
+                                    <div class="core-skill" id="ac-core-skill"></div>
+                                </div>
+                                <div class="hangar-3d-container">
+                                    <canvas id="hangar-canvas"></canvas>
+                                </div>
+                            </div>
+                            <div class="hangar-grid" id="hangar-grid"></div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-achievements">
+                        <div class="achievements-content">
+                            <div class="achievements-header">
+                                <div class="achievements-title">成就系统</div>
+                                <div class="achievements-progress">
+                                    <span id="achievement-count">0/6</span> 成就已解锁
+                                </div>
+                            </div>
+                            <div class="achievements-grid" id="achievements-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-center">
+                <div class="plane-display">
+                    <div class="pixel-plane-3d">
+                        <div class="plane-cockpit"></div>
+                        <div class="plane-body-main"></div>
+                        <div class="plane-wing-left"></div>
+                        <div class="plane-wing-right"></div>
+                        <div class="plane-engine-left"></div>
+                        <div class="plane-engine-right"></div>
+                        <div class="plane-tail"></div>
+                    </div>
+                    <div class="plane-equipments">
+                        <div class="equipment-slot" id="main-eq-0" onclick="showEquipDetail(0)">
+                            <div class="slot-content" id="main-eq-name-0">空</div>
+                            <div class="slot-cd-bar" id="main-eq-cd-0"></div>
+                        </div>
+                        <div class="equipment-slot" id="main-eq-1" onclick="showEquipDetail(1)">
+                            <div class="slot-content" id="main-eq-name-1">空</div>
+                            <div class="slot-cd-bar" id="main-eq-cd-1"></div>
+                        </div>
+                        <div class="equipment-slot" id="main-eq-2" onclick="showEquipDetail(2)">
+                            <div class="slot-content" id="main-eq-name-2">空</div>
+                            <div class="slot-cd-bar" id="main-eq-cd-2"></div>
+                        </div>
+                        <div class="equipment-slot" id="main-eq-3" onclick="showEquipDetail(3)">
+                            <div class="slot-content" id="main-eq-name-3">空</div>
+                            <div class="slot-cd-bar" id="main-eq-cd-3"></div>
+                        </div>
+                        <div class="equipment-slot" id="main-eq-4" onclick="showEquipDetail(4)">
+                            <div class="slot-content" id="main-eq-name-4">空</div>
+                            <div class="slot-cd-bar" id="main-eq-cd-4"></div>
+                        </div>
+                        <div class="equipment-slot" id="main-eq-5" onclick="showEquipDetail(5)">
+                            <div class="slot-content" id="main-eq-name-5">空</div>
+                            <div class="slot-cd-bar" id="main-eq-cd-5"></div>
+                        </div>
+                        <div class="equipment-slot" id="main-eq-6" onclick="showEquipDetail(6)">
+                            <div class="slot-content" id="main-eq-name-6">空</div>
+                            <div class="slot-cd-bar" id="main-eq-cd-6"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-right">
+                <div class="battle-panel">
+                    <div class="next-enemy">
+                        <div class="enemy-label">下一个敌人</div>
+                        <div class="enemy-preview" id="enemy-preview">
+                            <div class="enemy-name" id="enemy-name">???</div>
+                            <div class="enemy-stats">
+                                <span>❤️ <span id="enemy-hp">???</span></span>
+                                <span>⚔️ <span id="enemy-attack">???</span></span>
+                                <span>🛡️ <span id="enemy-defense">???</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-battle" onclick="startBattle()">⚔️ 前往战斗</button>
+                    <div class="battle-tips">
+                        <p>提示：战斗为自动回合制，战斗期间无法干预</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Battle Interface -->
+    <div class="battle-interface" id="battle-interface">
+        <div class="battle-header">
+            <div class="battle-stage">突袭节点 - 第<span id="battle-stage">1</span>区段</div>
+            <button class="btn-battle-close" onclick="endBattleView()">✕</button>
+        </div>
+        <div class="battle-arena-3d">
+            <canvas id="battle-canvas"></canvas>
+            <div class="battle-ui-overlay">
+                <div class="combatant player-side">
+                    <div class="combatant-info">
+                        <div class="combatant-name">玩家战机</div>
+                        <div class="hp-bar-container">
+                            <div class="hp-bar" id="player-hp-bar"></div>
+                            <div class="hp-text" id="player-hp-text">100/100</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="battle-vs">VS</div>
+                <div class="combatant enemy-side">
+                    <div class="combatant-info">
+                        <div class="combatant-name" id="battle-enemy-name">敌人</div>
+                        <div class="hp-bar-container enemy-hp">
+                            <div class="hp-bar" id="enemy-hp-bar"></div>
+                            <div class="hp-text" id="enemy-hp-text">100/100</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="battle-equipment-bar">
+            <div class="aircraft-core-info">
+                <div class="core-icon">💎</div>
+                <div class="core-content" id="core-name">核心装备</div>
+                <div class="core-cd-bar" id="core-cd-bar"></div>
+                <div class="energy-bar-container">
+                    <div class="energy-bar" id="energy-bar"></div>
+                    <div class="energy-text" id="energy-text">0/100</div>
+                </div>
+            </div>
+            <div class="equip-slots">
+                <div class="equip-slot" id="slot-0">
+                    <div class="slot-icon" id="icon-0">📦</div>
+                    <div class="slot-content" id="content-0">空</div>
+                    <div class="slot-cd-bar" id="cd-bar-0"></div>
+                </div>
+                <div class="equip-slot" id="slot-1">
+                    <div class="slot-icon" id="icon-1">📦</div>
+                    <div class="slot-content" id="content-1">空</div>
+                    <div class="slot-cd-bar" id="cd-bar-1"></div>
+                </div>
+                <div class="equip-slot" id="slot-2">
+                    <div class="slot-icon" id="icon-2">📦</div>
+                    <div class="slot-content" id="content-2">空</div>
+                    <div class="slot-cd-bar" id="cd-bar-2"></div>
+                </div>
+                <div class="equip-slot" id="slot-3">
+                    <div class="slot-icon" id="icon-3">📦</div>
+                    <div class="slot-content" id="content-3">空</div>
+                    <div class="slot-cd-bar" id="cd-bar-3"></div>
+                </div>
+                <div class="equip-slot" id="slot-4">
+                    <div class="slot-icon" id="icon-4">📦</div>
+                    <div class="slot-content" id="content-4">空</div>
+                    <div class="slot-cd-bar" id="cd-bar-4"></div>
+                </div>
+                <div class="equip-slot" id="slot-5">
+                    <div class="slot-icon" id="icon-5">📦</div>
+                    <div class="slot-content" id="content-5">空</div>
+                    <div class="slot-cd-bar" id="cd-bar-5"></div>
+                </div>
+                <div class="equip-slot" id="slot-6">
+                    <div class="slot-icon" id="icon-6">📦</div>
+                    <div class="slot-content" id="content-6">空</div>
+                    <div class="slot-cd-bar" id="cd-bar-6"></div>
+                </div>
+            </div>
+        </div>
+        <div class="battle-result" id="battle-result"></div>
+    </div>
+
+    <div class="about-screen" id="about-screen">
+        <div class="about-content">
+            <div class="about-title">像素飞机大乱斗</div>
+            <div class="about-subtitle">Pixel-Plane-Battle-Royale</div>
+            <div class="about-version">V1.0.0</div>
+            <div class="about-overview">
+                <h3>项目概述</h3>
+                <p>像素飞机大乱斗是一个基于 H5 技术的类回合制类塔防单机网页游戏项目，完整复刻《崩坏：星穹铁道》中的「像素飞机大乱斗」活动玩法。玩家通过购买装备、升级核心、合成装备来强化像素飞机，在战斗回合中与敌人自动战斗。战斗期间玩家无法干预，胜负取决于战前的装备配置和核心升级策略。</p>
+                <p>游戏风格为 3D 像素风，采用纯前端技术实现，以 AGPLv3.0 协议开源，仅用于学习交流目的，不涉及任何商业行为。</p>
+            </div>
+            <div class="about-info">
+                <div class="info-item">
+                    <span class="info-label">开发语言</span>
+                    <span class="info-value">HTML5、CSS3、JavaScript</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">运行环境</span>
+                    <span class="info-value">现代浏览器（Chrome / Edge / Safari / Firefox）</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">作者</span>
+                    <span class="info-value">Malkuth-K（Malkuth_K）</span>
+                </div>
+            </div>
+            <div class="about-license">
+                <p>GNU AGPL v3.0</p>
+            </div>
+            <button class="btn-back" onclick="hideAbout()">返回</button>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
+
+
